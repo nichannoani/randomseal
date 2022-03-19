@@ -5,10 +5,11 @@ from pprint import pprint
 class RandChois:
     def __init__(self):
         print("init rand_chois")
-        self.list = ''
+        self.list = None
 
     # 取得用リストを作った方が効率が良さそうだがまずは総当たりで作成
-    def rand_chois(self, rc_min, rc_max):
+    def rand_chois(self, rc_min, rc_max, inport_list):
+        self.list = inport_list
         flag = False
         getlist = None
         while not flag:     # ラベルは無視する
@@ -23,3 +24,5 @@ class RandChois:
         # print(random.choice(self.list))
         print("Name", getlist[1], end='')
         print(" Rank", getlist[3])
+
+        return getlist

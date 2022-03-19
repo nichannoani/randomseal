@@ -10,9 +10,13 @@ import os
 
 class WindowApp:
 
-    def __init__(self):
+    def __init__(self, make_dict, rand_chois):
         # 変数宣言
         self.csvlist = ''
+        self.make_dict = make_dict
+        self.rand_chois = rand_chois
+        # mlist = lib.make_dict.MakeDict(test=False)
+        # rand_chois = lib.rand_Chois.RandChois(1, 10, mlist.list)
 
         # ウィンドウを作成 --- (*1)
         self.win = tk.Tk()
@@ -33,7 +37,7 @@ class WindowApp:
         self.okButton.pack()
 
         # 抽選ボタン
-        self.okButton = tk.Button(self.win, text='抽選', command=self.ok_click)
+        self.okButton = tk.Button(self.win, text='抽選', command=self.lottery_click)
         self.okButton.pack()
 
     # 参照ボタンを押した時 --- (*3)
@@ -55,6 +59,12 @@ class WindowApp:
             # csvlistは空にする
             self.csvlist = ''
             print("ファイルは選択されませんでした")
+
+    # 抽選ボタンを押した時
+    def lottery_click(self):
+        self.make_dict.make_dict(self.csvlist)
+        ans = self.rand_chois.rand_chois(1, 1, self.csvlist)
+        mbox.showinfo("抽選結果", ans)
 
     def mainloop(self, *args):
         print("nowloop")

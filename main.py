@@ -19,14 +19,12 @@ def print_hi(name):
 if __name__ == '__main__':
     print_hi('PyCharm')
 
-
-
     # list = lib.make_dict.MakeDict(test=True)
-    # mlist = lib.make_dict.MakeDict(test=False, md_list=csvlist)
-    # rand_chois = lib.rand_Chois.RandChois(1, 10, mlist.list)
+    make_dict = lib.make_dict.MakeDict(test=False)
+    rand_chois = lib.rand_Chois.RandChois()
     # rand_chois.rand_chois(1)
 
-    app = lib.windowapp.WindowApp()
+    app = lib.windowapp.WindowApp(make_dict, rand_chois)
     app.mainloop()
 
     # myinstance = MyClass("Hello!")
