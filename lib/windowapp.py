@@ -23,7 +23,7 @@ class WindowApp:
 
         # ウィンドウを作成 --- (*1)
         self.win = tk.Tk()
-        self.win.geometry("500x250")  # サイズを指定
+        self.win.geometry("500x141")  # サイズを指定
         self.win.resizable(False, False)
 
         # 部品を作成 --- (*2)
@@ -60,13 +60,19 @@ class WindowApp:
         app_btn = ttk.Button(main_frm, text="抽選実行", command=self.lottery_click)
         app_btn.grid(column=1, row=2)
 
+        # 調整用
+        control_label = ttk.Label(main_frm, text="")
+        control_label.grid(column=0, row=4) #, rowspan=2)
+        # control_label2 = ttk.Label(main_frm, text="")
+        # control_label2.grid(column=0, row=5)
+
         # リスト表示ボタン
         list_btn = ttk.Button(main_frm, text="リスト表示", command=self.listwin)
-        list_btn.grid(column=1, row=4)
+        list_btn.grid(column=0, row=5, sticky=tk.SW)
 
         # 閉じるボタン
         close_btn = ttk.Button(main_frm, text="閉じる", command=self.close)
-        close_btn.grid(column=3, row=5)
+        close_btn.grid(column=2, row=5, sticky=tk.SE)
 
         # 再描画
         # reset = ttk.Button(main_frm, text="再描画", command=self.reset)
@@ -187,17 +193,8 @@ class WindowApp:
     def set(self):
         self.sp1.insert(0, '0')
 
-    # 起動時に初期設定する
-    def open_file(self):
-        print("")
-
     def version(self):
         mbox.showinfo("バージョン情報", "Share Ver: 0.01")
-
-    # 起動時に初期設定する
-    def close_disp(self):
-        # self.sp1.insert(0, '0')
-        print("")
 
     def mainloop(self, *args):
         print("nowloop")
