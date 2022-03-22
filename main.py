@@ -25,7 +25,14 @@ if __name__ == '__main__':
     # rand_chois.rand_chois(1)
 
     app = lib.windowapp.WindowApp(make_dict, rand_chois)
-    app.mainloop()
+    close = False
+    while True:
+        reset = app.mainloop()
+        if not reset:
+            break
+        else:
+            app = lib.windowapp.WindowApp(make_dict, rand_chois)
+
 
     # myinstance = MyClass("Hello!")
     # print(myinstance.value)
