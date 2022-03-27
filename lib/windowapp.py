@@ -40,8 +40,11 @@ class WindowApp:
         folder_label.grid(column=0, row=0, pady=10)
 
         # ファイル参照ファイルパス表示ボックス
-        folder_box = ttk.Entry(main_frm)
-        folder_box.grid(column=1, row=0, sticky=tkinter.EW, padx=5)
+        self.path = tk.StringVar()
+        # folder_box = ttk.Entry(main_frm, textvariable=self.path)
+        self.folder_box = ttk.Entry(main_frm)
+        self.folder_box.grid(column=1, row=0, sticky=tkinter.EW, padx=5)
+        self.folder_box.configure(state='readonly')
 
         # ファイル参照ボタン
         folder_btn = ttk.Button(main_frm, text="参照", command=self.ask_folder)
@@ -126,6 +129,13 @@ class WindowApp:
         # ファイル選択ダイアログの表示
         ftype = [("データファイル", "*.csv;*.xlsx;*.xls")]
         file_path = tkinter.filedialog.askopenfilename(filetypes=ftype)
+        # フォルダパスをテキストボックスに表示
+        self.folder_box.configure(state='normal')
+        self.folder_box.delete(0, tkinter.END)
+        self.folder_box.insert(tkinter.END, file_path)
+        self.folder_box.configure(state='readonly')
+        # ここまで
+
         if len(file_path) != 0:
             # ファイルが選択された場合
             with open(file_path) as f:
