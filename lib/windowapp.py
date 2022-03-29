@@ -142,6 +142,8 @@ class WindowApp:
                 reader = csv.reader(f)
                 self.csvlist = [row for row in reader]
             self.listflag = True
+            if not self.rand_chois.set_data(self.csvlist):
+                mbox.showinfo("警告", "リストが読み込まれていません")
         else:
             # ファイル選択がキャンセルされた場合
             # csvlistは空にする
@@ -152,9 +154,16 @@ class WindowApp:
     def lottery_click(self):
         if self.listflag:
             self.make_dict.make_dict(self.csvlist)
-            ans = self.rand_chois.rand_chois(1, 1, self.csvlist)
-            t = self.viwetext_reformat(text=ans)
-            mbox.showinfo("抽選結果", t)
+            i = self.rand_chois.get_count()
+            j = int(self.sp1.get())     # スピンボックスから同時回数を取得する
+            if j > i:   # 同時実行回数よりも有効なリストを上回った時
+                mbox.showerror("警告", "同時抽選回数が有効なリストを下回っています")
+                return  # 関数終了
+            while j >= 0:   # 同時実行回数分実行
+                j -= 1
+                ans = self.rand_chois.rand_chois()
+                t = self.viwetext_reformat(text=ans)
+                mbox.showinfo("抽選結果", t)
         else:
             mbox.showinfo("警告", "リストが読み込まれていません")
 
