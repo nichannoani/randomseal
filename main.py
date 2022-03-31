@@ -6,6 +6,7 @@ import csv
 import lib.rand_Chois
 import lib.make_dict
 import lib.windowapp as wd
+import lib.view_list
 
 # from mypackage.mod2 import square as square
 
@@ -22,6 +23,7 @@ if __name__ == '__main__':
     # list = lib.make_dict.MakeDict(test=True)
     make_dict = lib.make_dict.MakeDict(test=False)
     rand_chois = lib.rand_Chois.RandChois()
+    view_list = lib.view_list.view_list()
     # rand_chois.rand_chois(1)
 
     app = lib.windowapp.WindowApp(make_dict, rand_chois)

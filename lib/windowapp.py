@@ -6,6 +6,7 @@ from tkinter import ttk
 from tkinter import messagebox as mbox
 from tkinter import filedialog
 import tkinter.filedialog
+import lib.view_list
 import os
 
 
@@ -70,8 +71,9 @@ class WindowApp:
         # control_label2.grid(column=0, row=5)
 
         # リスト表示ボタン
-        list_btn = ttk.Button(main_frm, text="リスト表示", command=self.listwin)
-        list_btn.grid(column=0, row=5, sticky=tk.SW)
+        self.__list_btn = ttk.Button(main_frm, text="リスト表示", command=self.listwin)
+        self.__list_btn.grid(column=0, row=5, sticky=tk.SW)
+        self.__list_btn['state'] = 'disabled'
 
         # 閉じるボタン
         close_btn = ttk.Button(main_frm, text="閉じる", command=self.close)
@@ -141,14 +143,18 @@ class WindowApp:
             with open(file_path) as f:
                 reader = csv.reader(f)
                 self.csvlist = [row for row in reader]
-            self.listflag = True
             if not self.rand_chois.set_data(self.csvlist):
                 mbox.showinfo("警告", "リストが読み込まれていません")
+                self.__list_btn['state'] = 'disabled'
+            # 問題なく正常に処理が終わった
+            self.listflag = True
+            self.__list_btn['state'] = 'normal'
         else:
             # ファイル選択がキャンセルされた場合
             # csvlistは空にする
             self.csvlist = ''
             print("ファイルは選択されませんでした")
+            self.__list_btn['state'] = 'disabled'
 
     # 抽選ボタンを押した時
     def lottery_click(self):
@@ -183,26 +189,23 @@ class WindowApp:
         return ans
 
     def listwin(self):
+        vl = lib.view_list.view_list()
         listwin = tk.Tk()
+        style = ttk.Style()
+
+        # style.configure("BW.TLabel", foreground="black", background="white")
         listwin.geometry("500x250")  # サイズを指定
-        column = ('ID', 'Name', 'Score')
+        # column = ('ID', 'Name', 'Score')
+        # print(type(column))
+        column = self.csvlist[0]
+        print(type(column))
         listwin.title('Score List')
         tree = ttk.Treeview(listwin, columns=column)
-        # 列の設定
-        tree.column('#0', width=0, stretch='no')
-        tree.column('ID', anchor='center', width=80)
-        tree.column('Name', anchor='w', width=100)
-        tree.column('Score', anchor='center', width=80)
-        # 列の見出し設定
-        tree.heading('#0', text='')
-        tree.heading('ID', text='ID', anchor='center')
-        tree.heading('Name', text='Name', anchor='w')
-        tree.heading('Score', text='Score', anchor='center')
-        # レコードの追加
-        tree.insert(parent='', index='end', iid=0, values=(1, 'KAWASAKI', 80))
-        tree.insert(parent='', index='end', iid=1, values=(2, 'SHIMIZU', 90))
+        # tree.column('#0', width=0, stretch='no')
+        tree = vl.view_list(tree, self.csvlist)
 
         # ウィジェットの配置
+        # style.configure("Treeview", foreground="black", background="white")
         tree.pack(pady=10)
 
     def close(self):
