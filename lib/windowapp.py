@@ -62,9 +62,10 @@ class WindowApp:
         self.sp1 = ttk.Spinbox(main_frm, textvariable=sptxt1, from_=0, to=10, increment=1)
         self.sp1.place(height=23, width=50, x=80, y=48)
 
-        # 実行ボタン
-        app_btn = ttk.Button(main_frm, text="抽選実行", command=self.lottery_click)
-        app_btn.grid(column=1, row=2)
+        # 抽選実行ボタン
+        self.__app_btn = ttk.Button(main_frm, text="抽選実行", command=self.lottery_click)
+        self.__app_btn.grid(column=1, row=2)
+        self.__app_btn['state'] = 'disabled'
 
         # 調整用
         control_label = ttk.Label(main_frm, text="")
@@ -149,15 +150,18 @@ class WindowApp:
             if not self.rand_chois.set_data(self.csvlist):
                 mbox.showinfo("警告", "リストが読み込まれていません")
                 self.__list_btn['state'] = 'disabled'
+                self.__app_btn['state'] = 'disabled'
             # 問題なく正常に処理が終わった
             self.listflag = True
             self.__list_btn['state'] = 'normal'
+            self.__app_btn['state'] = 'normal'
         else:
             # ファイル選択がキャンセルされた場合
             # csvlistは空にする
             self.csvlist = ''
             print("ファイルは選択されませんでした")
             self.__list_btn['state'] = 'disabled'
+            self.__app_btn['state'] = 'disabled'
 
     # 抽選ボタンを押した時
     def lottery_click(self):
