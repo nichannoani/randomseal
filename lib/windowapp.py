@@ -131,7 +131,8 @@ class WindowApp:
 
     def file_read(self):
         # ファイル選択ダイアログの表示
-        ftype = [("データファイル", "*.csv;*.xlsx;*.xls")]
+        # ftype = [("データファイル", "*.csv;*.xlsx;*.xls")]
+        ftype = [("データファイル", "*.csv")]
         file_path = tkinter.filedialog.askopenfilename(filetypes=ftype)
         # フォルダパスをテキストボックスに表示
         self.folder_box.configure(state='normal')
