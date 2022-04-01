@@ -18,6 +18,8 @@ class WindowApp:
         self.make_dict = make_dict
         self.rand_chois = rand_chois
         self.listflag = False
+        self.tree = None
+        self.listwin_tk = None
 
         # mlist = lib.make_dict.MakeDict(test=False)
         # rand_chois = lib.rand_Chois.RandChois(1, 10, mlist.list)
@@ -162,16 +164,23 @@ class WindowApp:
             self.make_dict.make_dict(self.csvlist)
             i = self.rand_chois.get_count()
             j = int(self.sp1.get())     # スピンボックスから同時回数を取得する
-            if j > i:   # 同時実行回数よりも有効なリストを上回った時
+            # if j > i or i <= 0:   # 同時実行回数よりも有効なリストを上回った時、もしくは有効なデータが無い時
+            if j > i:  # 同時実行回数よりも有効なリストを上回った時、もしくは有効なデータが無い時
                 mbox.showerror("警告", "同時抽選回数が有効なリストを下回っています")
                 return  # 関数終了
             while j >= 0:   # 同時実行回数分実行
                 j -= 1
-                ans = self.rand_chois.rand_chois()
-                t = self.viwetext_reformat(text=ans)
+                ans = self.rand_chois.rand_chois()  # リストから抽選する
+                # self.csvlist = self.rand_chois.get_list() # csv.listと抽選結果を同期させる
+                print(type(ans))
+                if ans == -1 and isinstance(ans, int):
+                    mbox.showerror("警告", "同時抽選回数が有効なリストを下回っています")
+                    return  # 関数終了
+                t = self.viwetext_reformat(text=ans)    # 表示用に整形する
                 mbox.showinfo("抽選結果", t)
         else:
             mbox.showinfo("警告", "リストが読み込まれていません")
+        self.listwin_update()
 
     # 抽選ボタンの結果表示の文章を整形する
     def viwetext_reformat(self, text):
@@ -188,25 +197,35 @@ class WindowApp:
         print("ans:", ans)
         return ans
 
+    # リスト表示
     def listwin(self):
+        # self.listwin_update()
         vl = lib.view_list.view_list()
-        listwin = tk.Tk()
+        self.listwin_tk = tk.Tk()
         style = ttk.Style()
 
         # style.configure("BW.TLabel", foreground="black", background="white")
-        listwin.geometry("500x250")  # サイズを指定
+        self.listwin_tk.geometry("500x250")  # サイズを指定
         # column = ('ID', 'Name', 'Score')
         # print(type(column))
         column = self.csvlist[0]
         print(type(column))
-        listwin.title('Score List')
-        tree = ttk.Treeview(listwin, columns=column)
+        self.listwin_tk.title('Score List')
+        self.tree = ttk.Treeview(self.listwin_tk, columns=column)
         # tree.column('#0', width=0, stretch='no')
-        tree = vl.view_list(tree, self.csvlist)
+        self.tree = vl.view_list(self.tree, self.csvlist)
 
         # ウィジェットの配置
         # style.configure("Treeview", foreground="black", background="white")
-        tree.pack(pady=10)
+        self.tree.pack(pady=10)
+
+        # self.tree.
+
+    # リストの更新処理
+    def listwin_update(self):
+        self.tree.delete(*self.tree.get_children())
+        vl = lib.view_list.view_list()
+        self.tree = vl.view_list(self.tree, self.csvlist)
 
     def close(self):
         self.win.destroy()
